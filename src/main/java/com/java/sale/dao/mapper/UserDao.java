@@ -11,6 +11,6 @@ import org.apache.ibatis.annotations.Select;
  */
 @Mapper
 public interface UserDao {
-    @Select("select id,name from user where id=#{id}")
-    public User getUserById(@Param("id") int id);
+    @Select("select * from user where id=#{id}")
+    User getUserById(@Param("id") long id);
 }

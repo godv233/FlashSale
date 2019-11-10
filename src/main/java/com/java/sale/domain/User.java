@@ -2,12 +2,21 @@ package com.java.sale.domain;
 
 import lombok.Data;
 
+import java.util.Date;
+
 /**
  * @author 曾伟
  * @date 2019/10/24 20:58
  */
 @Data
 public class User {
-    private int id;
-    private String name;
+    private Long id;
+    private String nickname;
+    private String password;
+    private String salt;
+    private String head;
+    private Date registerDate;
+    private Date LastLoginDate;
+    private Integer loginCount;
+
 }

@@ -35,5 +35,10 @@ public class Result<T> {
         return new Result<T>(data);
     }
 
-
+    /**
+     * 失败时候的调用
+     * */
+    public static <T> Result<T> error(CodeMsg cm){
+        return new  Result<T>(cm);
+    }
 }

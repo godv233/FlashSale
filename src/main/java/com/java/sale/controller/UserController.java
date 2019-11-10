@@ -19,7 +19,7 @@ public class UserController {
     @GetMapping("/db")
     @ResponseBody
     private Result<User> getById(){
-        User user = userService.getById(1);
+        User user = userService.getById(1L);
         return Result.success(user);
     }
 
