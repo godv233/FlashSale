@@ -24,7 +24,6 @@ public class Result<T> {
         this.code = cm.getCode();
         this.msg = cm.getMsg();
     }
-
     /**
      * 成功时调用
      * @param data

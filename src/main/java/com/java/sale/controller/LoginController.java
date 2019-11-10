@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.validation.Valid;
+
 /**
  * @author 曾伟
  * @date 2019/10/26 15:30
@@ -31,27 +33,23 @@ public class LoginController {
     }
     @PostMapping("/login/do_login")
     @ResponseBody
-    public Result<Boolean> doLogin(LoginVo loginVo){
+    public Result<Boolean> doLogin(@Valid LoginVo loginVo){
+        System.out.println(loginVo.toString());
         logger.info(loginVo.toString());
-        //参数校验
-        String passInput=loginVo.getPassword();
-        String mobile=loginVo.getMobile();
-        if (StringUtils.isEmpty(passInput)){
-            return Result.error(CodeMsg.PASSWORD_EMPTY);
-        }
-        if (StringUtils.isEmpty(mobile)){
-            return Result.error(CodeMsg.MOBILE_EMPTY);
-        }
-        if (!ValidatorUtils.isMobile(mobile)){
-            return Result.error(CodeMsg.MOBILE_ERROR);
-        }
+        //原始的参数校验，改为了jsr303
+//        String passInput=loginVo.getPassword();
+//        String mobile=loginVo.getMobile();
+//        if (StringUtils.isEmpty(passInput)){
+//            return Result.error(CodeMsg.PASSWORD_EMPTY);
+//        }
+//        if (StringUtils.isEmpty(mobile)){
+//            return Result.error(CodeMsg.MOBILE_EMPTY);
+//        }
+//        if (!ValidatorUtils.isMobile(mobile)){
+//            return Result.error(CodeMsg.MOBILE_ERROR);
+//        }
         //登录
-        CodeMsg codeMsg = userService.login(loginVo);
-        if (codeMsg.getCode()==0){
-            return Result.success(true);
-        }else {
-            return Result.error(codeMsg);
-        }
-
+        boolean islogin = userService.login(loginVo);
+        return Result.success(true);
     }
 }
