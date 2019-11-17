@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 /**
@@ -33,7 +34,7 @@ public class LoginController {
     }
     @PostMapping("/login/do_login")
     @ResponseBody
-    public Result<Boolean> doLogin(@Valid LoginVo loginVo){
+    public Result<Boolean> doLogin(HttpServletResponse response, @Valid LoginVo loginVo){
         System.out.println(loginVo.toString());
         logger.info(loginVo.toString());
         //原始的参数校验，改为了jsr303
@@ -49,7 +50,7 @@ public class LoginController {
 //            return Result.error(CodeMsg.MOBILE_ERROR);
 //        }
         //登录
-        boolean islogin = userService.login(loginVo);
+        boolean islogin = userService.login(response,loginVo);
         return Result.success(true);
     }
 }
