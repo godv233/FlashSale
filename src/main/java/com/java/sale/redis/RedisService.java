@@ -1,7 +1,5 @@
 package com.java.sale.redis;
 
-import com.java.sale.domain.User;
-import jdk.nashorn.internal.parser.Token;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -44,11 +42,11 @@ public class RedisService {
      * @param expireTime
      * @return
      */
-    public boolean set(String key, Object value, Long expireTime) {
+    public boolean set(String key, Object value, int expireTime) {
         boolean result = false;
         try {
             redisTemplate.opsForValue().set(key, value);
-            redisTemplate.expire(key, expireTime.longValue(), TimeUnit.SECONDS);
+            redisTemplate.expire(key, expireTime, TimeUnit.SECONDS);
             result = true;
         } catch (Exception e) {
             e.printStackTrace();
