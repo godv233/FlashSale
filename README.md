@@ -1,2 +1,2 @@
 # FlashSale
-秒杀系统
+基于Spring Boot+redis+rabbitMQ的秒杀系统
