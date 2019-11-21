@@ -40,7 +40,7 @@ public class GoodsController {
     @RequestMapping("/to_detail/{goodsId}")
     public String toDetail(Model model, User user, @PathVariable("goodsId") long goodsId) {
         model.addAttribute("user", user);
-        GoodsVo goodsVo = goodsService.GoodsVoById(goodsId);
+        GoodsVo goodsVo = goodsService.goodsVoById(goodsId);
         model.addAttribute("goods", goodsVo);
         //
         long startTime = goodsVo.getStartDate().getTime();
