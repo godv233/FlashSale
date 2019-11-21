@@ -26,3 +26,4 @@ mybatis:
     map-underscore-to-camel-case: true
     default-fetch-size: 100
     default-statement-timeout: 300
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

@@ -1,0 +1,15 @@
+package com.java.sale.domain;
+
+import lombok.Data;
+
+/**
+ * @author 曾伟
+ * @date 2019/11/21 19:52
+ */
+@Data
+public class FlashSaleOrder {
+    private Long id;
+    private Long userId;
+    private Long orderId;
+    private Long goodsId;
+}

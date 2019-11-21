@@ -2,7 +2,6 @@ package com.java.sale.exception;
 
 import com.java.sale.common.CodeMsg;
 import com.java.sale.common.Result;
-import com.sun.org.apache.bcel.internal.classfile.Code;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -23,12 +22,14 @@ import java.util.List;
 public class GlobalExceptionHandler {
     @ExceptionHandler(value = Exception.class)
     public Result<String> exceptionHandler(HttpServletRequest request,Exception e){
+        e.printStackTrace();
         if (e instanceof BindException){//参数绑定异常
             BindException exception=(BindException) e;
             List<ObjectError> errors=exception.getAllErrors();//得到异常列表
             ObjectError error=errors.get(0);//只得到第一个
             String msg=error.getDefaultMessage();//得到信息
             //返回一个绑定了参数的codemsg
+
             return Result.error(CodeMsg.BIND_ERROR.fillArgs(msg));
         }else if (e  instanceof GlobalException){//全局异常
             GlobalException globalException=(GlobalException) e;

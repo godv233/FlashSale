@@ -57,7 +57,8 @@ public class UserService {
             throw new GlobalException(CodeMsg.PASSWORD_ERROR);
         }
         //生成一个cookie
-        addCookie(user,response);
+        String token = UUIDUtils.uuid();
+        addCookie(user,token,response);
         return true;
     }
 
@@ -69,13 +70,12 @@ public class UserService {
         User user = (User) redisService.get(token);
         //更改过期时间：就是重新设置一下cookie.
         if (user!=null){
-            addCookie(user,response);
+            addCookie(user,token,response);
         }
         return user;
     }
     //生成一个cookie
-    private void addCookie(User user,HttpServletResponse response){
-        String token = UUIDUtils.uuid();
+    private void addCookie(User user,String token,HttpServletResponse response){
         redisService.set(token, user, COOKIE_EXPIRED_TIME);
         Cookie cookie = new Cookie(COOKIE_NAME_TOKEN, token);
         cookie.setMaxAge(COOKIE_EXPIRED_TIME);
