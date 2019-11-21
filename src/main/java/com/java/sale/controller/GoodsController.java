@@ -1,6 +1,5 @@
 package com.java.sale.controller;
 
-import ch.qos.logback.core.net.SyslogOutputStream;
 import com.java.sale.domain.User;
 import com.java.sale.redis.RedisService;
 import com.java.sale.service.UserService;
@@ -30,7 +29,6 @@ public class GoodsController {
             return "login";
         }
         String token=StringUtils.isEmpty(paramToken)? cookieToken:paramToken;
-        System.out.println(token);
         User user = (User) redisService.get(token);
         model.addAttribute("user",user);
         return "goods_list";
