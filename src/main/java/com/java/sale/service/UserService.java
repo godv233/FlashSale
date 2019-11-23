@@ -5,6 +5,7 @@ import com.java.sale.dao.mapper.UserDao;
 import com.java.sale.domain.User;
 import com.java.sale.exception.GlobalException;
 import com.java.sale.redis.RedisService;
+import com.java.sale.redis.UserKey;
 import com.java.sale.utils.MD5Utils;
 import com.java.sale.utils.UUIDUtils;
 import com.java.sale.vo.LoginVo;
@@ -22,7 +23,6 @@ import javax.servlet.http.HttpServletResponse;
 @Service
 public class UserService {
     public static final String COOKIE_NAME_TOKEN = "token";
-    public static final int COOKIE_EXPIRED_TIME = 100000;
     @Autowired
     private UserDao userDao;
     @Autowired
@@ -30,7 +30,15 @@ public class UserService {
 
     //@Cacheable(cacheNames = "user")
     public User getById(Long id) {
-        return userDao.getUserById(id);
+        //取缓存
+        User user = (User) redisService.get(UserKey.getById, "" + id);
+        if (user == null) {
+            //数据库中取，并且更新缓存
+            user = userDao.getUserById(id);
+            redisService.set(UserKey.getById, "" + id, user);
+        }
+        return user;
+
     }
 
     /**
@@ -58,33 +66,35 @@ public class UserService {
         }
         //生成一个cookie
         String token = UUIDUtils.uuid();
-        addCookie(user,token,response);
+        addCookie(user, token, response);
         return true;
     }
 
     /**
      * 通过token在redis中得到user
+     *
      * @param response
      * @param token
      * @return
      */
-    public User getUserByToken(HttpServletResponse response,String token) {
-        if (StringUtils.isEmpty(token)){
+    public User getUserByToken(HttpServletResponse response, String token) {
+        if (StringUtils.isEmpty(token)) {
             return null;
         }
         //得到user对象
-        User user = (User) redisService.get(token);
+        User user = (User) redisService.get(UserKey.token, token);
         //更改过期时间：就是重新设置一下cookie.
-        if (user!=null){
-            addCookie(user,token,response);
+        if (user != null) {
+            addCookie(user, token, response);
         }
         return user;
     }
+
     //生成一个cookie
-    private void addCookie(User user,String token,HttpServletResponse response){
-        redisService.set(token, user, COOKIE_EXPIRED_TIME);
+    private void addCookie(User user, String token, HttpServletResponse response) {
+        redisService.set(UserKey.token, token, user);
         Cookie cookie = new Cookie(COOKIE_NAME_TOKEN, token);
-        cookie.setMaxAge(COOKIE_EXPIRED_TIME);
+        cookie.setMaxAge(UserKey.token.expireSeconds());
         cookie.setPath("/");
         response.addCookie(cookie);
     }

@@ -17,16 +17,18 @@ public class RedisService {
     private RedisTemplate<String, Object> redisTemplate;
 
     /**
-     * set对象，没有过期时间
-     *
+     * set
+     * @param keyPrefix
      * @param key
      * @param value
      * @return
      */
-    public boolean set(String key, Object value) {
+    public boolean set( KeyPrefix keyPrefix,String key, Object value) {
         boolean result = false;
+        String realKey=keyPrefix.getPrefix()+key;
         try {
-            redisTemplate.opsForValue().set(key, value);
+            redisTemplate.opsForValue().set(realKey, value);
+            redisTemplate.expire(realKey,keyPrefix.expireSeconds(), TimeUnit.SECONDS);
             result = true;
         } catch (Exception e) {
             e.printStackTrace();
@@ -35,34 +37,16 @@ public class RedisService {
     }
 
     /**
-     * set对象，并且设置过期时间
-     *
-     * @param key
-     * @param value
-     * @param expireTime
-     * @return
+     * 通过key，get对象
      */
-    public boolean set(String key, Object value, int expireTime) {
-        boolean result = false;
-        try {
-            redisTemplate.opsForValue().set(key, value);
-            redisTemplate.expire(key, expireTime, TimeUnit.SECONDS);
-            result = true;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return result;
-    }
-
-    /**
-     * 通过key，得到对象
-     */
-    public Object get(String key) {
+    public Object get(KeyPrefix prefix,String key) {
         Object result = null;
+        //真正的key
         if (StringUtils.isEmpty(key))
             return null;
+        String realKey=prefix.getPrefix()+key;
         try {
-            result = redisTemplate.opsForValue().get(key);
+            result = redisTemplate.opsForValue().get(realKey);
         } catch (Exception e) {
             e.printStackTrace();
         }

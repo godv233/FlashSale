@@ -15,7 +15,7 @@ spring:
   #配置redis
   redis:
     host: 192.168.25.138
-    timeout: 10
+    timeout: 50000
     lettuce:
       pool:
         max-active: 1000 # 连接池最大连接数
@@ -31,4 +31,3 @@ mybatis:
     default-fetch-size: 100
     default-statement-timeout: 300
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
-debug: true
