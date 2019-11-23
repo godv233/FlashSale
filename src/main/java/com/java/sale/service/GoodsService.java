@@ -1,6 +1,7 @@
 package com.java.sale.service;
 
 import com.java.sale.dao.mapper.GoodsDao;
+import com.java.sale.domain.Goods;
 import com.java.sale.vo.GoodsVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,7 +26,19 @@ public class GoodsService {
         return  goodsDao.getGoodsVoList();
     }
 
+    /**
+     * 根据id得到goods
+    * @param goodsId
+     * @return
+     */
     public GoodsVo goodsVoById(long goodsId) {
         return goodsDao.getGoodsVoById(goodsId);
+    }
+
+    /**
+     * 减少库存
+     */
+    public void reduceStock(GoodsVo goodsVo) {
+        goodsDao.reduceStock(goodsVo.getId());
     }
 }

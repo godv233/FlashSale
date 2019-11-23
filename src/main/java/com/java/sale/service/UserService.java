@@ -62,6 +62,12 @@ public class UserService {
         return true;
     }
 
+    /**
+     * 通过token在redis中得到user
+     * @param response
+     * @param token
+     * @return
+     */
     public User getUserByToken(HttpServletResponse response,String token) {
         if (StringUtils.isEmpty(token)){
             return null;

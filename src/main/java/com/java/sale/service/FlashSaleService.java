@@ -30,8 +30,9 @@ public class FlashSaleService {
     @Transactional
     public OrderInfo miaosha(User user, GoodsVo goodsVo) {
         //减库存
+        goodsService.reduceStock(goodsVo);
         //下订单
         //写入秒杀订单
-        return null;
+        return orderService.createOrder(user,goodsVo);
     }
 }

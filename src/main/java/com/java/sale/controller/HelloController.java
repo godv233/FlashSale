@@ -1,5 +1,6 @@
 package com.java.sale.controller;
 
+import com.java.sale.domain.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -11,8 +12,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 public class HelloController {
     @GetMapping("/hello")
-    public String hello(){
-        return "hello";
+    @ResponseBody
+    public User hello(User user){
+        return user;
     }
 
 }
