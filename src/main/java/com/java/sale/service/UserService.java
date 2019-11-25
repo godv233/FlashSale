@@ -38,9 +38,7 @@ public class UserService {
             redisService.set(UserKey.getById, "" + id, user);
         }
         return user;
-
     }
-
     /**
      * 登陆方法
      *
@@ -99,5 +97,9 @@ public class UserService {
         response.addCookie(cookie);
     }
 
+
+    public static void main(String[] args) {
+        System.out.println(MD5Utils.FromPassToDBPass("b502d16c56db07315dca3f3453d730df", "1a2b3c"));
+    }
 
 }

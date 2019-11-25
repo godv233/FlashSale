@@ -1,9 +1,11 @@
 package com.java.sale.controller;
 
+import com.java.sale.common.Result;
 import com.java.sale.domain.User;
 import com.java.sale.redis.GoodsKey;
 import com.java.sale.redis.RedisService;
 import com.java.sale.service.GoodsService;
+import com.java.sale.vo.GoodsDetailVo;
 import com.java.sale.vo.GoodsVo;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,14 +52,13 @@ public class GoodsController {
     @ResponseBody
     public String toLogin(HttpServletRequest request, HttpServletResponse response, Model model, User user) {
         model.addAttribute("user", user);
-
         //从缓存中取
         String html = (String) redisService.get(GoodsKey.getGoodsList, "");
         if (!StringUtils.isEmpty(html)) {
             return html;
         }
         //手动渲染
-                //查询商品列表
+        //查询商品列表
         List<GoodsVo> goodsVoList = goodsService.goodsVoList();
         model.addAttribute("goodslist", goodsVoList);
 //        return "goods_list";
@@ -71,7 +72,15 @@ public class GoodsController {
 
     }
 
-
+    /**
+     * 模板引擎
+     * @param request
+     * @param response
+     * @param model
+     * @param user
+     * @param goodsId
+     * @return
+     */
     @RequestMapping(value = "/to_detail/{goodsId}", produces = "text/html")
     @ResponseBody
     public String toDetail( HttpServletRequest request, HttpServletResponse response,Model model, User user, @PathVariable("goodsId") long goodsId) {
@@ -111,5 +120,40 @@ public class GoodsController {
         return html;
     }
 
+    /**
+     *前后端分离
+     * @param request
+     * @param response
+     * @param model
+     * @param user
+     * @param goodsId
+     * @return
+     */
+    @RequestMapping(value="/detail/{goodsId}")
+    @ResponseBody
+    public Result<GoodsDetailVo> detail(User user, @PathVariable("goodsId")long goodsId) {
+        GoodsVo goods = goodsService.goodsVoById(goodsId);
+        long startAt = goods.getStartDate().getTime();
+        long endAt = goods.getEndDate().getTime();
+        long now = System.currentTimeMillis();
+        int miaoshaStatus = 0;
+        int remainSeconds = 0;
+        if(now < startAt ) {//秒杀还没开始，倒计时
+            miaoshaStatus = 0;
+            remainSeconds = (int)((startAt - now )/1000);
+        }else  if(now > endAt){//秒杀已经结束
+            miaoshaStatus = 2;
+            remainSeconds = -1;
+        }else {//秒杀进行中
+            miaoshaStatus = 1;
+            remainSeconds = 0;
+        }
+        GoodsDetailVo vo = new GoodsDetailVo();
+        vo.setGoods(goods);
+        vo.setUser(user);
+        vo.setRemainSeconds(remainSeconds);
+        vo.setMiaoshaStatus(miaoshaStatus);
+        return Result.success(vo);
+    }
 
 }
