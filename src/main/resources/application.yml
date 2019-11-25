@@ -22,7 +22,14 @@ spring:
         max-wait: -1ms  # 连接池最大阻塞等待时间（使用负值表示没有限制）
         min-idle: 10 # 连接池中的最小空闲连接
         max-idle: 500 # 连接池中的最大空闲连接
-
+#配置静态资源相关
+  resources:
+    add-mappings: true
+    cache:
+      period: 3600
+    chain:
+      enabled: true
+      html-application-cache: true
 #配置mybatis
 mybatis:
   mapper-locations: classpath:com.java.sale.dao.mapper/*.xml

@@ -105,16 +105,18 @@ function getMiaoshaResult(goodsId){
 }
 
 function doMiaosha(){
+    var goodsId = g_getQueryString("goodsId");
 	$.ajax({
 		url:"/miaosha/do_miaosha",
 		type:"POST",
-		data:{
-			goodsId:$("#goodsId").val(),
-		},
+        data:{
+		    goodsId:goodsId
+        },
 		success:function(data){
 			if(data.code == 0){
-				//window.location.href="/order_detail.htm?orderId="+data.data.id;
-				getMiaoshaResult($("#goodsId").val());
+			    console.log("123");
+				window.location.href="/order_detail.htm?orderId="+data.data.id;
+				//getMiaoshaResult($("#goodsId").val());
 			}else{
 				layer.msg(data.msg);
 			}

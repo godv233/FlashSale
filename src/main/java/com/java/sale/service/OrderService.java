@@ -4,6 +4,7 @@ import com.java.sale.dao.mapper.OrderDao;
 import com.java.sale.domain.FlashSaleOrder;
 import com.java.sale.domain.OrderInfo;
 import com.java.sale.domain.User;
+import com.java.sale.redis.RedisService;
 import com.java.sale.vo.GoodsVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,7 +20,8 @@ import java.util.Date;
 public class OrderService {
     @Autowired
     private OrderDao orderDao;
-
+    @Autowired
+    private RedisService redisService;
     /**
      * 通过userid和goodsId得到订单
      * @param userId
@@ -27,8 +29,11 @@ public class OrderService {
      * @return
      */
     public FlashSaleOrder orderByUserIdGoodsId(Long userId, long goodsId) {
-
+        //判断数据库中时候已经有了订单。
         return orderDao.getOrderByUserIdGoodsId(userId,goodsId);
+        //将订单的信息存入redis。判断的时候直接访问redis而不是数据库。
+
+
     }
 
     /**
@@ -58,5 +63,9 @@ public class OrderService {
         flashSaleOrder.setUserId(user.getId());
         orderDao.FlashOrder(flashSaleOrder);
         return orderInfo;
+    }
+
+    public OrderInfo getOrderById(long orderId) {
+        return orderDao.getOrderById(orderId);
     }
 }
