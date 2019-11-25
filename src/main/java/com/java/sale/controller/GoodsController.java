@@ -50,16 +50,17 @@ public class GoodsController {
     @ResponseBody
     public String toLogin(HttpServletRequest request, HttpServletResponse response, Model model, User user) {
         model.addAttribute("user", user);
-//        //查询商品列表
-//        List<GoodsVo> goodsVoList = goodsService.goodsVoList();
-//        model.addAttribute("goodslist", goodsVoList);
-//        return "goods_list";
+
         //从缓存中取
         String html = (String) redisService.get(GoodsKey.getGoodsList, "");
         if (!StringUtils.isEmpty(html)) {
             return html;
         }
         //手动渲染
+                //查询商品列表
+        List<GoodsVo> goodsVoList = goodsService.goodsVoList();
+        model.addAttribute("goodslist", goodsVoList);
+//        return "goods_list";
         WebContext context = new WebContext(request, response, request.getServletContext(), request.getLocale(), model.asMap());
         html = thymeleafViewResolver.getTemplateEngine().process("goods_list", context);
         if (!StringUtils.isEmpty(html)) {
