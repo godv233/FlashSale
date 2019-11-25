@@ -4,10 +4,8 @@ import com.java.sale.common.CodeMsg;
 import com.java.sale.common.Result;
 import com.java.sale.domain.OrderInfo;
 import com.java.sale.domain.User;
-import com.java.sale.redis.RedisService;
 import com.java.sale.service.GoodsService;
 import com.java.sale.service.OrderService;
-import com.java.sale.service.UserService;
 import com.java.sale.vo.GoodsVo;
 import com.java.sale.vo.OrderDetailVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,11 +22,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 @RequestMapping("/order")
 public class OrderController {
-    @Autowired
-    private UserService userService;
-    @Autowired
-    private RedisService redisService;
-
     @Autowired
     private OrderService orderService;
 
