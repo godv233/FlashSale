@@ -30,6 +30,28 @@ spring:
     chain:
       enabled: true
       html-application-cache: true
+  #rabbitmq消息队列的相关配置
+  rabbitmq:
+    host: 192.168.25.138
+    port: 5672
+    username: admin
+    password: admin
+    virtual-host: /
+    listener:
+      simple:
+        #消费者数量
+        concurrency: 10
+        max-concurrency: 10
+        #每次取的消息数
+        prefetch: 1
+        #消费者自动启动
+        auto-startup: true
+        default-requeue-rejected: true
+        retry:
+          enabled: true
+          initial-interval: 1000
+          max-attempts: 3
+          max-interval: 10000
 #配置mybatis
 mybatis:
   mapper-locations: classpath:com.java.sale.dao.mapper/*.xml
@@ -39,3 +61,4 @@ mybatis:
     default-fetch-size: 100
     default-statement-timeout: 300
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
