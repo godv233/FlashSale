@@ -58,11 +58,11 @@ public class OrderService {
         orderInfo.setOrderChannel(1);//通过程序判断
         orderInfo.setStatus(0);
         orderInfo.setUserId(user.getId());
-        long orderId= orderDao.insert(orderInfo);
+        orderDao.insert(orderInfo);
         //秒杀订单
         FlashSaleOrder flashSaleOrder=new FlashSaleOrder();
         flashSaleOrder.setGoodsId(goodsVo.getId());
-        flashSaleOrder.setOrderId(orderId);
+        flashSaleOrder.setOrderId(orderInfo.getId());
         flashSaleOrder.setUserId(user.getId());
         orderDao.FlashOrder(flashSaleOrder);
         boolean set = redisService.set(OrderKey.getMiaoshaOrderByUidGid, "" + user.getId() + goodsVo.getId(), flashSaleOrder);

@@ -18,17 +18,20 @@ public class RedisService {
 
     /**
      * set
+     *
      * @param keyPrefix
      * @param key
      * @param value
      * @return
      */
-    public boolean set( KeyPrefix keyPrefix,String key, Object value) {
+    public boolean set(KeyPrefix keyPrefix, String key, Object value) {
         boolean result = false;
-        String realKey=keyPrefix.getPrefix()+key;
+        String realKey = keyPrefix.getPrefix() + key;
         try {
             redisTemplate.opsForValue().set(realKey, value);
-            redisTemplate.expire(realKey,keyPrefix.expireSeconds(), TimeUnit.SECONDS);
+            if (keyPrefix.expireSeconds() > 0) {
+                redisTemplate.expire(realKey, keyPrefix.expireSeconds(), TimeUnit.SECONDS);
+            }
             result = true;
         } catch (Exception e) {
             e.printStackTrace();
@@ -39,17 +42,43 @@ public class RedisService {
     /**
      * 通过key，get对象
      */
-    public Object get(KeyPrefix prefix,String key) {
+    public Object get(KeyPrefix prefix, String key) {
         Object result = null;
         //真正的key
         if (StringUtils.isEmpty(key))
             return null;
-        String realKey=prefix.getPrefix()+key;
+        String realKey = prefix.getPrefix() + key;
         try {
             result = redisTemplate.opsForValue().get(realKey);
         } catch (Exception e) {
             e.printStackTrace();
         }
         return result;
+    }
+
+    /**
+     * 减1
+     *
+     * @param prefix
+     * @param key
+     * @return
+     */
+    public long decrease(KeyPrefix prefix, String key) {
+        String realKey = prefix.getPrefix() + key;
+        if (StringUtils.isEmpty(realKey)) return 0;
+        long result = 0;
+        try {
+            result = redisTemplate.opsForValue().decrement(realKey);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            return result;
+        }
+    }
+
+    public boolean exists(KeyPrefix prefix, String key) {
+        String realKey = prefix.getPrefix() + key;
+        if (StringUtils.isEmpty(realKey)) return false;
+        return redisTemplate.hasKey(realKey);
     }
 }

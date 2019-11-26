@@ -20,6 +20,12 @@
     </properties>
 
     <dependencies>
+<!--        json处理的fastJson-->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>1.2.38</version>
+        </dependency>
         <!--    jsr303的参数校验-->
         <dependency>
             <groupId>org.springframework.boot</groupId>

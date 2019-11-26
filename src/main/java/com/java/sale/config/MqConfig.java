@@ -1,7 +1,6 @@
 package com.java.sale.config;
 
 import org.springframework.amqp.core.Queue;
-import org.springframework.amqp.core.TopicExchange;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -11,32 +10,10 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 public class MqConfig {
-    public static final String QUEUE = "queue";
-    public static final String TOPIC_QUEUE1 = "topic.q1";
-    public static final String TOPIC_QUEUE2 = "topic.q2";
-
-    /**
-     * direct模式。直接使用队列相等
-     *
-     * @return
-     */
-    @Bean
-    public Queue queue() {
-        return new Queue("queue", true);
-    }
-
-
-    /**
-     * topic模式,模糊匹配
-     */
-    @Bean
-    public Queue topicQueue1() {
-        return new Queue(MqConfig.TOPIC_QUEUE1, true);
-
-    }
+    public static final String MIAOSHA_QUEUE = "sale.queue";
 
     @Bean
-    public Queue topicQueue2() {
-        return new Queue(MqConfig.TOPIC_QUEUE2, true);
+    public Queue saleQueue() {
+        return new Queue(MqConfig.MIAOSHA_QUEUE, true);
     }
 }
