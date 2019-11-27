@@ -21,6 +21,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.imageio.ImageIO;
+import javax.servlet.http.HttpServletResponse;
+import java.awt.image.BufferedImage;
+import java.io.OutputStream;
 import java.util.List;
 import java.util.UUID;
 
@@ -82,7 +86,7 @@ public class FlashSaleController implements InitializingBean {
 //        return Result.success(orderInfo);
         //验证path
         boolean check = flashSaleService.check(path, user.getId(), goodsId);
-        if (!check){
+        if (!check) {
             return Result.error(CodeMsg.REQUEST_ILLEGAL);
         }
 
@@ -144,17 +148,48 @@ public class FlashSaleController implements InitializingBean {
 
     }
 
-
+    /**
+     * 得到path
+     *
+     * @param model
+     * @param user
+     * @param goodsId
+     * @return
+     */
     @GetMapping("/path")
     @ResponseBody
-    public Result<String> getMiaoshaPath(Model model, User user, @RequestParam("goodsId") long goodsId) {
+    public Result<String> getMiaoshaPath(Model model, User user, @RequestParam("goodsId") long goodsId,
+                                         @RequestParam(value="verifyCode", defaultValue="0")int verifyCode) {
         model.addAttribute("user", user);
         if (user == null) {
             return Result.error(CodeMsg.SESSION_ERROR);
         }
-        String str= flashSaleService.createPath(user.getId(),goodsId);
+        boolean check = flashSaleService.checkVerifyCode(user, goodsId, verifyCode);
+        if(!check) {
+            return Result.error(CodeMsg.REQUEST_ILLEGAL);
+        }
+        String str = flashSaleService.createPath(user.getId(), goodsId);
         return Result.success(str);
     }
 
 
+    @RequestMapping(value = "/verifyCode", method = RequestMethod.GET)
+    @ResponseBody
+    public Result<String> getMiaoshaVerifyCod(HttpServletResponse response, User user,
+                                              @RequestParam("goodsId") long goodsId) {
+        if (user == null) {
+            return Result.error(CodeMsg.SESSION_ERROR);
+        }
+        try {
+            BufferedImage image = flashSaleService.createVerifyCode(user, goodsId);
+            OutputStream out = response.getOutputStream();
+            ImageIO.write(image, "JPEG", out);
+            out.flush();
+            out.close();
+            return null;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Result.error(CodeMsg.MIAOSHA_FAIL);
+        }
+    }
 }

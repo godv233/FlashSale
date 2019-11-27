@@ -81,4 +81,16 @@ public class RedisService {
         if (StringUtils.isEmpty(realKey)) return false;
         return redisTemplate.hasKey(realKey);
     }
+
+    /**
+     * 删除
+     * @param verifyCode
+     * @param s
+     */
+    public boolean delete(MiaoshaKey verifyCode, String key) {
+        String realKey=verifyCode.getPrefix()+key;
+        Boolean delete = redisTemplate.delete(realKey);
+        return delete;
+
+    }
 }
