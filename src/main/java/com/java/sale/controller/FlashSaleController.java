@@ -1,5 +1,6 @@
 package com.java.sale.controller;
 
+import com.java.sale.access.AccessLimit;
 import com.java.sale.common.CodeMsg;
 import com.java.sale.common.Result;
 import com.java.sale.domain.FlashSaleOrder;
@@ -7,6 +8,7 @@ import com.java.sale.domain.OrderInfo;
 import com.java.sale.domain.User;
 import com.java.sale.rabbitmq.MqSender;
 import com.java.sale.rabbitmq.SaleMessage;
+import com.java.sale.redis.AccessKey;
 import com.java.sale.redis.GoodsKey;
 import com.java.sale.redis.MiaoshaKey;
 import com.java.sale.redis.RedisService;
@@ -156,14 +158,20 @@ public class FlashSaleController implements InitializingBean {
      * @param goodsId
      * @return
      */
+    @AccessLimit(seconds = 5,maxCount = 5,needLogin = true)
     @GetMapping("/path")
     @ResponseBody
     public Result<String> getMiaoshaPath(Model model, User user, @RequestParam("goodsId") long goodsId,
                                          @RequestParam(value="verifyCode", defaultValue="0")int verifyCode) {
+        //测试时defaultValue.还需要修改
         model.addAttribute("user", user);
         if (user == null) {
             return Result.error(CodeMsg.SESSION_ERROR);
         }
+        //查询接口访问的次数，实现限流防刷
+
+
+
         boolean check = flashSaleService.checkVerifyCode(user, goodsId, verifyCode);
         if(!check) {
             return Result.error(CodeMsg.REQUEST_ILLEGAL);

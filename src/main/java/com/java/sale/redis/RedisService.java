@@ -93,4 +93,14 @@ public class RedisService {
         return delete;
 
     }
+
+    /**
+     * 加1
+     * @param withExpire
+     * @param key
+     */
+    public void incr(AccessKey withExpire, String key) {
+        String realKey=withExpire.getPrefix()+key;
+        redisTemplate.opsForValue().increment(realKey);
+    }
 }
