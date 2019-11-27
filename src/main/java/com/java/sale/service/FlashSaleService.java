@@ -5,8 +5,11 @@ import com.java.sale.domain.OrderInfo;
 import com.java.sale.domain.User;
 import com.java.sale.redis.MiaoshaKey;
 import com.java.sale.redis.RedisService;
+import com.java.sale.utils.UUIDUtils;
 import com.java.sale.vo.GoodsVo;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.retry.annotation.EnableRetry;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -74,5 +77,19 @@ public class FlashSaleService {
 
     private boolean getGoodsOver(long goodsId) {
         return redisService.exists(MiaoshaKey.goodsOver, "" + goodsId);
+    }
+
+    public boolean check(String path, Long userId, Long goodsId) {
+        if (userId == null || goodsId==null|| StringUtils.isEmpty(path)) {
+            return false;
+        }
+        String redisPath = (String) redisService.get(MiaoshaKey.miaoshaPath, "" + userId + "_" + goodsId);
+        return redisPath.equals(path);
+    }
+
+    public String createPath(Long userId,Long goodsId) {
+        String str = UUIDUtils.uuid();
+        redisService.set(MiaoshaKey.miaoshaPath, "" + userId+ "_" + goodsId, str);
+        return str;
     }
 }

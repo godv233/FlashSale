@@ -8,21 +8,21 @@ import com.java.sale.domain.User;
 import com.java.sale.rabbitmq.MqSender;
 import com.java.sale.rabbitmq.SaleMessage;
 import com.java.sale.redis.GoodsKey;
+import com.java.sale.redis.MiaoshaKey;
 import com.java.sale.redis.RedisService;
 import com.java.sale.service.FlashSaleService;
 import com.java.sale.service.GoodsService;
 import com.java.sale.service.OrderService;
+import com.java.sale.utils.UUIDUtils;
 import com.java.sale.vo.GoodsVo;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * 秒杀的控制器
@@ -52,9 +52,10 @@ public class FlashSaleController implements InitializingBean {
      * @param goodsId
      * @return
      */
-    @RequestMapping("/do_miaosha")
+    @RequestMapping("/{path}/do_miaosha")
     @ResponseBody
-    public Result<Integer> sale(Model model, User user, @RequestParam("goodsId") long goodsId) {
+    public Result<Integer> sale(Model model, User user, @RequestParam("goodsId") long goodsId,
+                                @PathVariable("path") String path) {
         model.addAttribute("user", user);
         if (user == null) {
             return Result.error(CodeMsg.SESSION_ERROR);
@@ -79,19 +80,26 @@ public class FlashSaleController implements InitializingBean {
 //        //写入秒杀订单
 //        OrderInfo orderInfo= flashSaleService.miaosha(user,goodsVo);
 //        return Result.success(orderInfo);
+        //验证path
+        boolean check = flashSaleService.check(path, user.getId(), goodsId);
+        if (!check){
+            return Result.error(CodeMsg.REQUEST_ILLEGAL);
+        }
+
+
         //接口优化
         //1.预减库存
         long decrease = redisService.decrease(GoodsKey.getGoodsStock, "" + goodsId);
-        if (decrease<=0){
+        if (decrease <= 0) {
             return Result.error(CodeMsg.MIAOSHA_FAIL);
         }
         //判断是否秒杀过了
         FlashSaleOrder order = orderService.orderByUserIdGoodsId(user.getId(), goodsId);
-        if (order!=null){//不能重复秒杀
+        if (order != null) {//不能重复秒杀
             return Result.error(CodeMsg.REPEATE_MIAOSHA);
         }
         //入队
-        SaleMessage message=new SaleMessage();
+        SaleMessage message = new SaleMessage();
         message.setGoodsId(goodsId);
         message.setUser(user);
         sender.miaoshaMessage(message);
@@ -108,15 +116,17 @@ public class FlashSaleController implements InitializingBean {
         List<GoodsVo> list = goodsService.goodsVoList();
         if (list != null && !list.isEmpty()) {//加入缓存
             for (GoodsVo goods : list) {
-                redisService.set(GoodsKey.getGoodsStock,""+goods.getId(),goods.getStockCount());
+                redisService.set(GoodsKey.getGoodsStock, "" + goods.getId(), goods.getStockCount());
             }
         }
     }
 
-    /**查询秒杀结果：
+    /**
+     * 查询秒杀结果：
      * 成功：orderId
      * 失败：-1
      * 还在处理中：0
+     *
      * @param model
      * @param user
      * @param goodsId
@@ -124,7 +134,7 @@ public class FlashSaleController implements InitializingBean {
      */
     @GetMapping("/result")
     @ResponseBody
-    public Result<Long> miaoshaResult(Model model, User user, @RequestParam("goodsId") long goodsId){
+    public Result<Long> miaoshaResult(Model model, User user, @RequestParam("goodsId") long goodsId) {
         model.addAttribute("user", user);
         if (user == null) {
             return Result.error(CodeMsg.SESSION_ERROR);
@@ -134,6 +144,17 @@ public class FlashSaleController implements InitializingBean {
 
     }
 
+
+    @GetMapping("/path")
+    @ResponseBody
+    public Result<String> getMiaoshaPath(Model model, User user, @RequestParam("goodsId") long goodsId) {
+        model.addAttribute("user", user);
+        if (user == null) {
+            return Result.error(CodeMsg.SESSION_ERROR);
+        }
+        String str= flashSaleService.createPath(user.getId(),goodsId);
+        return Result.success(str);
+    }
 
 
 }
