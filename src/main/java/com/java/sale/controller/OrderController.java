@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
+ * 订单控制器
+ *
  * @author 曾伟
  * @date 2019/11/25 19:01
  */
@@ -28,6 +30,13 @@ public class OrderController {
     @Autowired
     private GoodsService goodsService;
 
+    /**
+     * 订单详情
+     * @param model
+     * @param user
+     * @param orderId
+     * @return
+     */
     @RequestMapping("/detail")
     @ResponseBody
     public Result<OrderDetailVo> info(Model model, User user,

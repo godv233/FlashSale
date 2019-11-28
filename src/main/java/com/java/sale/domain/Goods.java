@@ -3,7 +3,7 @@ package com.java.sale.domain;
 import lombok.Data;
 
 /**
- * 商品
+ * 普通商品
  * @author 曾伟
  * @date 2019/11/21 19:43
  */

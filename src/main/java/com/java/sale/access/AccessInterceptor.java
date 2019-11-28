@@ -31,8 +31,7 @@ public class AccessInterceptor extends HandlerInterceptorAdapter {
     private RedisService redisService;
 
     /**
-     * 方法执行之前
-     *
+     * 拦截器：方法执行之前
      * @param request
      * @param response
      * @param handler
@@ -78,7 +77,7 @@ public class AccessInterceptor extends HandlerInterceptorAdapter {
     }
 
     /**
-     * 再拦截器中抛出异常
+     * 在拦截器中抛出异常给前台
      *
      * @param response
      * @param sessionError
@@ -93,7 +92,12 @@ public class AccessInterceptor extends HandlerInterceptorAdapter {
 
     }
 
-
+    /**
+     * 通过请求中的token得到user，可检验登录
+     * @param request
+     * @param response
+     * @return
+     */
     private User getUser(HttpServletRequest request, HttpServletResponse response) {
         String paramToken = request.getParameter(UserService.COOKIE_NAME_TOKEN);
         String cookieToken = getCookieValue(request, UserService.COOKIE_NAME_TOKEN);
@@ -107,7 +111,12 @@ public class AccessInterceptor extends HandlerInterceptorAdapter {
         return user;
     }
 
-
+    /**
+     * 在cookie中取值
+     * @param request
+     * @param cookieNameToken
+     * @return
+     */
     private String getCookieValue(HttpServletRequest request, String cookieNameToken) {
         Cookie[] cookies = request.getCookies();
         if (cookies == null || cookies.length <= 0) {

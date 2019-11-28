@@ -3,7 +3,7 @@ package com.java.sale.exception;
 import com.java.sale.common.CodeMsg;
 import lombok.Data;
 
-/**自定义全局异常，封装codemsg
+/**自定义全局异常，封装CodeMsg
  * @author 曾伟
  * @date 2019/11/10 16:53
  */

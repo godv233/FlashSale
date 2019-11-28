@@ -21,7 +21,6 @@ import java.util.Random;
 
 /**
  * 秒杀的service
- *
  * @author 曾伟
  * @date 2019/11/21 22:19
  */
@@ -50,7 +49,7 @@ public class FlashSaleService {
         BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
         Graphics g = image.getGraphics();
         // set the background color
-        g.setColor(new Color(0xDCDCDC));
+        g.setColor(new Color(0xD48DDC));
         g.fillRect(0, 0, width, height);
         // draw the border
         g.setColor(Color.black);
@@ -76,7 +75,13 @@ public class FlashSaleService {
         return image;
     }
 
-
+    /**
+     * 验证图片验证码
+     * @param user
+     * @param goodsId
+     * @param verifyCode
+     * @return
+     */
     public boolean checkVerifyCode(User user, long goodsId, int verifyCode) {
         if(user == null || goodsId <=0) {
             return false;
@@ -107,7 +112,7 @@ public class FlashSaleService {
 
     private static char[] ops = new char[] {'+', '-', '*'};
     /**
-     * + - *
+     *  得到验证码的计算式，只有 + - *
      * */
     private String generateVerifyCode(Random rdm) {
         int num1 = rdm.nextInt(10);
@@ -162,14 +167,30 @@ public class FlashSaleService {
         }
     }
 
+    /**
+     * 设置商品秒杀结束
+     * @param goodsId
+     */
     private void setGoodsOver(long goodsId) {
         redisService.set(MiaoshaKey.goodsOver, "" + goodsId, true);
     }
 
+    /**
+     * 查询商品是否秒杀结束
+     * @param goodsId
+     * @return
+     */
     private boolean getGoodsOver(long goodsId) {
         return redisService.exists(MiaoshaKey.goodsOver, "" + goodsId);
     }
 
+    /**
+     * 验证
+     * @param path
+     * @param userId
+     * @param goodsId
+     * @return
+     */
     public boolean check(String path, Long userId, Long goodsId) {
         if (userId == null || goodsId==null|| StringUtils.isEmpty(path)) {
             return false;
@@ -178,6 +199,12 @@ public class FlashSaleService {
         return redisPath.equals(path);
     }
 
+    /**
+     * 生成url中的path
+     * @param userId
+     * @param goodsId
+     * @return
+     */
     public String createPath(Long userId,Long goodsId) {
         String str = UUIDUtils.uuid();
         redisService.set(MiaoshaKey.miaoshaPath, "" + userId+ "_" + goodsId, str);

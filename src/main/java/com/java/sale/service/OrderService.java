@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Date;
 
 /**
+ * 订单service
  * @author 曾伟
  * @date 2019/11/21 22:10
  */
@@ -70,6 +71,11 @@ public class OrderService {
         return orderInfo;
     }
 
+    /**
+     * 通过id得到订单详情
+     * @param orderId
+     * @return
+     */
     public OrderInfo getOrderById(long orderId) {
         return orderDao.getOrderById(orderId);
     }

@@ -5,6 +5,7 @@ import com.java.sale.domain.OrderInfo;
 import org.apache.ibatis.annotations.*;
 
 /**
+ * 订单
  * @author 曾伟
  * @date 2019/11/21 22:12
  */

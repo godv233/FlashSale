@@ -1,5 +1,8 @@
 package com.java.sale.redis;
 
+/**
+ * redis的限流的key
+ */
 public class AccessKey extends BasePrefix{
 
 	private AccessKey( int expireSeconds, String prefix) {

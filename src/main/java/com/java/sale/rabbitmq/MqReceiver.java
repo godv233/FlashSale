@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
+ * 消息队列的消费者
  * @author 曾伟
  * @date 2019/11/26 15:07
  */

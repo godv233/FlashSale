@@ -1,5 +1,8 @@
 package com.java.sale.redis;
 
+/**
+ * redis的秒杀相关的key
+ */
 public class MiaoshaKey extends BasePrefix {
 
     private MiaoshaKey(int expireSeconds, String prefix) {

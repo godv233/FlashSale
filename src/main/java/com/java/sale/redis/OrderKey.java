@@ -1,5 +1,8 @@
 package com.java.sale.redis;
 
+/**
+ * 订单相关的key
+ */
 public class OrderKey extends BasePrefix {
 	private static final int ORDER_EXPIRE=3600*24;//一天
 

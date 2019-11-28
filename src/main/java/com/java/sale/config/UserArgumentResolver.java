@@ -17,8 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * 用户参数解析器
- *
+ * 参数解析器：用户
  * @author 曾伟
  * @date 2019/11/21 15:13
  */
@@ -27,6 +26,11 @@ public class UserArgumentResolver implements HandlerMethodArgumentResolver {
     @Autowired
     private UserService userService;
 
+    /**
+     * 判断参数类型
+     * @param methodParameter
+     * @return
+     */
     @Override
     public boolean supportsParameter(MethodParameter methodParameter) {
         //参数的判断，是否是user类型，true才会执行下一步
@@ -62,6 +66,7 @@ public class UserArgumentResolver implements HandlerMethodArgumentResolver {
 //            }
 //        }
 //        return null;
+        //以上注解是逻辑，后期放在了拦截器中进行校验，拦截器比参数配置先发生
         return UserContext.getUser();
     }
 }

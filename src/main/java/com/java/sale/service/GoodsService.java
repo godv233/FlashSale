@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 /**
- * 商品服务
+ * 商品service
  * @author 曾伟
  * @date 2019/11/21 20:00
  */

@@ -18,23 +18,36 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 /**
+ * 登录控制器
+ *
  * @author 曾伟
  * @date 2019/10/26 15:30
  */
 @Controller
 public class LoginController {
 
-    private static Logger logger= LoggerFactory.getLogger(LoginController.class);
+    private static Logger logger = LoggerFactory.getLogger(LoginController.class);
     @Autowired
     private UserService userService;
 
+    /**
+     * 跳转页面
+     * @return
+     */
     @GetMapping("/to_login")
-    public String toLogin(){
+    public String toLogin() {
         return "login";
     }
+
+    /**
+     * 登录方法
+     * @param response
+     * @param loginVo
+     * @return
+     */
     @PostMapping("/login/do_login")
     @ResponseBody
-    public Result<Boolean> doLogin(HttpServletResponse response, @Valid LoginVo loginVo){
+    public Result<Boolean> doLogin(HttpServletResponse response, @Valid LoginVo loginVo) {
         System.out.println(loginVo.toString());
         logger.info(loginVo.toString());
         //原始的参数校验，改为了jsr303
@@ -50,7 +63,7 @@ public class LoginController {
 //            return Result.error(CodeMsg.MOBILE_ERROR);
 //        }
         //登录
-        boolean islogin = userService.login(response,loginVo);
+        boolean islogin = userService.login(response, loginVo);
         return Result.success(true);
     }
 }

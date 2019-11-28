@@ -14,9 +14,10 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 public @interface AccessLimit {
+    //过期时间
     int seconds();
-
+    //在过期时间中的最大访问次数
     int maxCount();
-
+    //是否需要登录
     boolean needLogin() default true;
 }

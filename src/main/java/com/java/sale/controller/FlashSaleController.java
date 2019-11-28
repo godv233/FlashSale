@@ -32,7 +32,6 @@ import java.util.UUID;
 
 /**
  * 秒杀的控制器
- *
  * @author 曾伟
  * @date 2019/11/21 21:58
  */
@@ -51,7 +50,7 @@ public class FlashSaleController implements InitializingBean {
     private MqSender sender;
 
     /**
-     * 页面静态化
+     * 页面静态化的秒杀接口
      *
      * @param model
      * @param user
@@ -113,7 +112,8 @@ public class FlashSaleController implements InitializingBean {
     }
 
     /**
-     * 系统初始化,加载缓存
+     * 系统初始化,加载缓存：可以修改到一个新的配置类中，专门做系统初始化
+     * 并且注意spring的一些初始化规则
      *
      * @throws Exception
      */
@@ -180,7 +180,13 @@ public class FlashSaleController implements InitializingBean {
         return Result.success(str);
     }
 
-
+    /**
+     * 得到生成校验码：
+     * @param response
+     * @param user
+     * @param goodsId
+     * @return
+     */
     @RequestMapping(value = "/verifyCode", method = RequestMethod.GET)
     @ResponseBody
     public Result<String> getMiaoshaVerifyCod(HttpServletResponse response, User user,

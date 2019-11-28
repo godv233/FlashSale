@@ -3,6 +3,7 @@ package com.java.sale.common;
 import lombok.Data;
 
 /**
+ * 与前台交互的类
  * @author 曾伟
  * @date 2019/10/24 20:49
  */

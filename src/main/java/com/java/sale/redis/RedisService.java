@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import java.util.concurrent.TimeUnit;
 
 /**
+ * redis相关的操作：增删改查
  * @author 曾伟
  * @date 2019/11/16 10:09
  */

@@ -1,5 +1,8 @@
 package com.java.sale.redis;
 
+/**
+ * 商品key
+ */
 public class GoodsKey extends BasePrefix {
 
     private GoodsKey(int expireSeconds, String prefix) {

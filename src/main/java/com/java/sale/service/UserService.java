@@ -17,6 +17,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 
 /**
+ * 用户service
  * @author 曾伟
  * @date 2019/10/24 21:01
  */
@@ -28,6 +29,11 @@ public class UserService {
     @Autowired
     private RedisService redisService;
 
+    /**
+     * 可以使用spring cache
+     * @param id
+     * @return
+     */
     //@Cacheable(cacheNames = "user")
     public User getById(Long id) {
         //取缓存
@@ -96,10 +102,4 @@ public class UserService {
         cookie.setPath("/");
         response.addCookie(cookie);
     }
-
-
-    public static void main(String[] args) {
-        System.out.println(MD5Utils.FromPassToDBPass("b502d16c56db07315dca3f3453d730df", "1a2b3c"));
-    }
-
 }

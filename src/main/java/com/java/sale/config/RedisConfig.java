@@ -18,14 +18,18 @@ import java.lang.reflect.Method;
 import java.time.Duration;
 
 /**
+ * redis的配置类
  * @author 曾伟
  * @date 2019/10/26 14:07
  */
 @Configuration
 @EnableCaching
 public class RedisConfig {
-
-    @Bean //在没有指定缓存Key的情况下，key生成策略
+    /**
+     * //在没有指定缓存Key的情况下，key生成策略
+     * @return
+     */
+    @Bean
     public KeyGenerator keyGenerator() {
         return new KeyGenerator() {
             @Override
@@ -41,7 +45,11 @@ public class RedisConfig {
         };
     }
 
-    // 缓存管理器 使用Lettuce，和Jedis有很大不同
+    /**
+     * 缓存管理器 使用Lettuce，和Jedis有很大不同
+     * @param lettuceConnectionFactory
+     * @return
+     */
     @Bean
     public CacheManager cacheManager(LettuceConnectionFactory  lettuceConnectionFactory) {
         //关键点，spring cache的注解使用的序列化都从这来，没有这个配置的话使用的jdk自己的序列化，实际上不影响使用，只是打印出来不适合人眼识别
@@ -61,6 +69,8 @@ public class RedisConfig {
 
     /**
      * RedisTemplate配置 在单独使用redisTemplate的时候 重新定义序列化方式
+     * @param lettuceConnectionFactory
+     * @return
      */
     @Bean
     public RedisTemplate<String, Object> redisTemplate(LettuceConnectionFactory lettuceConnectionFactory) {

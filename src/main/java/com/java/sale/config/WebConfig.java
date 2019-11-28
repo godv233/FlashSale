@@ -11,7 +11,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import java.util.List;
 
 /**
- * @author 曾伟
+ * web的简单配置。
+* @author 曾伟
  * @date 2019/11/21 15:07
  */
 @Configuration
@@ -40,6 +41,7 @@ public class WebConfig implements WebMvcConfigurer {
     }
 
     /**
+     * 注册参数解析器
      * @param resolvers
      */
     @Override

@@ -22,6 +22,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
+ * 商品控制器
  * @author 曾伟
  * @date 2019/11/16 11:00
  */
