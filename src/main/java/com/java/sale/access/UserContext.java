@@ -15,7 +15,6 @@ public class UserContext {
         userHolder.set(user);
     }
 
-
     public static User getUser() {
         return userHolder.get();
     }

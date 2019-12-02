@@ -64,8 +64,8 @@ public class UserService {
         //验证密码
         String dbPass = user.getPassword();
         String salt = user.getSalt();
-        String toDBPass = MD5Utils.FromPassToDBPass(password, salt);
-        if (!toDBPass.equals(dbPass)) {
+        String toDbPass = MD5Utils.fromPassToDBPass(password, salt);
+        if (!toDbPass.equals(dbPass)) {
             throw new GlobalException(CodeMsg.PASSWORD_ERROR);
         }
         //生成一个cookie

@@ -73,9 +73,8 @@ public class RedisService {
             result = redisTemplate.opsForValue().decrement(realKey);
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            return result;
         }
+        return result;
     }
 
     public boolean exists(KeyPrefix prefix, String key) {

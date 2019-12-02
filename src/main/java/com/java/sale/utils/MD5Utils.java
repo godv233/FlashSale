@@ -10,7 +10,7 @@ import org.apache.commons.codec.digest.DigestUtils;
  */
 public class MD5Utils {
     //用于额外加密的固定的salt
-    private final static String salt = "1a2b3c";
+    private final static String SALT = "1a2b3c";
 
     /**
      * 输入加上salt，加密一次
@@ -18,7 +18,7 @@ public class MD5Utils {
      * @return
      */
     public static String inputPassToFromPass(String inputPass) {
-        String pass =inputPass+salt;
+        String pass =inputPass+SALT;
         return DigestUtils.md5Hex(pass);
     }
 
@@ -28,7 +28,7 @@ public class MD5Utils {
      * @param salt
      * @return
      */
-    public static String FromPassToDBPass(String pass, String salt) {
+    public static String fromPassToDBPass(String pass, String salt) {
         String fromPass = pass + salt;
         return DigestUtils.md5Hex(fromPass);
     }
@@ -41,7 +41,7 @@ public class MD5Utils {
      */
     public static String inputPassToDbPass(String pass,String salt){
         String fromPass=inputPassToFromPass(pass);
-        String dbPass=FromPassToDBPass(fromPass,salt);
+        String dbPass=fromPassToDBPass(fromPass,salt);
         return dbPass;
     }
 

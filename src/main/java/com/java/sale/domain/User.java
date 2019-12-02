@@ -17,7 +17,7 @@ public class User {
     private String salt;
     private String head;
     private Date registerDate;
-    private Date LastLoginDate;
+    private Date lastLoginDate;
     private Integer loginCount;
 
 }

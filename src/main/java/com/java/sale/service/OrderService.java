@@ -56,7 +56,8 @@ public class OrderService {
         orderInfo.setGoodsId(goodsVo.getId());
         orderInfo.setGoodsName(goodsVo.getGoodsName());
         orderInfo.setGoodsPrice(goodsVo.getMiaoshaPrice());
-        orderInfo.setOrderChannel(1);//通过程序判断
+        //一般通过程序判断:这里直接写死
+        orderInfo.setOrderChannel(1);
         orderInfo.setStatus(0);
         orderInfo.setUserId(user.getId());
         orderDao.insert(orderInfo);
@@ -65,7 +66,7 @@ public class OrderService {
         flashSaleOrder.setGoodsId(goodsVo.getId());
         flashSaleOrder.setOrderId(orderInfo.getId());
         flashSaleOrder.setUserId(user.getId());
-        orderDao.FlashOrder(flashSaleOrder);
+        orderDao.flashOrder(flashSaleOrder);
         boolean set = redisService.set(OrderKey.getMiaoshaOrderByUidGid, "" + user.getId() + goodsVo.getId(), flashSaleOrder);
         System.out.println(set);
         return orderInfo;

@@ -56,21 +56,12 @@ public class AccessInterceptor extends HandlerInterceptorAdapter {
                 String key = request.getRequestURI();
                 if (needLogin) {
                     if (user == null) {
-                        render(response, CodeMsg.SESSION_ERROR);//返回前端页面一些错误的信息
+                        //返回前端页面一些错误的信息
+                        render(response, CodeMsg.SESSION_ERROR);
                         return false;
                     }
                     key += "_" + user.getId();
                     //限流的核心代码
-
-                    /*Integer count = (Integer) redisService.get(AccessKey.withExpire(seconds), key);
-                    if (count == null) {
-                        redisService.set(AccessKey.withExpire(seconds), key, 1);
-                    } else if (count < maxCount) {
-                        redisService.incr(AccessKey.withExpire(seconds), key);
-                    } else {
-                        render(response, CodeMsg.ACCESS_LIMIT_REACHED);
-                        return false;
-                    }*/
                     boolean allowed = redisService.isAllowed(AccessKey.withExpire(seconds), key, seconds, maxCount);
                     if (!allowed){
                         render(response,CodeMsg.ACCESS_LIMIT_REACHED);

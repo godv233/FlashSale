@@ -13,13 +13,13 @@ import java.util.regex.Pattern;
  */
 public class ValidatorUtils {
     //正则表达式简单验证
-    private static final Pattern mobile_pattern = Pattern.compile("1\\d{10}");
+    private static final Pattern MOBILE_PATTERN = Pattern.compile("1\\d{10}");
 
     public static boolean isMobile(String mobile) {
         if (StringUtils.isEmpty(mobile)) {
             return false;
         }
-        Matcher m = mobile_pattern.matcher(mobile);
+        Matcher m = MOBILE_PATTERN.matcher(mobile);
         return m.matches();
     }
 }

@@ -65,26 +65,6 @@ public class FlashSaleController implements InitializingBean {
         if (user == null) {
             return Result.error(CodeMsg.SESSION_ERROR);
         }
-//        //秒杀的主要逻辑
-//        //判断商品库存
-//        GoodsVo goodsVo = goodsService.goodsVoById(goodsId);
-//        if (goodsVo!=null){
-//            int stock=goodsVo.getStockCount();
-//            if (stock<=0){//库存不足，秒杀失败
-//                return Result.error(CodeMsg.MIAO_SHA_OVER);
-//            }
-//        }
-//        //判断是否已经秒杀到了
-//        FlashSaleOrder order = orderService.orderByUserIdGoodsId(user.getId(), goodsId);
-//        if (order!=null){//不能重复秒杀
-//            return Result.error(CodeMsg.REPEATE_MIAOSHA);
-//        }
-//        //下单，需要事务控制，写在一个service里，使用事务控制。
-//        //减库存
-//        //下订单
-//        //写入秒杀订单
-//        OrderInfo orderInfo= flashSaleService.miaosha(user,goodsVo);
-//        return Result.success(orderInfo);
         //验证path
         boolean check = flashSaleService.check(path, user.getId(), goodsId);
         if (!check) {
