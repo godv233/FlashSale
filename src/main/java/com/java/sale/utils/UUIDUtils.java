@@ -8,7 +8,9 @@ import java.util.UUID;
  */
 public class UUIDUtils {
     public static String uuid(){
-        //去掉-的uuid
+        /**
+         * 去掉-的uuid
+         */
         return UUID.randomUUID().toString().replace("-","");
     }
 }

@@ -5,6 +5,7 @@ import javax.validation.Payload;
 import java.lang.annotation.*;
 
 /**
+ * 验证手机号的注解
  * @author 曾伟
  * @date 2019/11/10 15:55
  */

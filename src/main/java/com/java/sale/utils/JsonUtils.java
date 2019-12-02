@@ -3,12 +3,18 @@ package com.java.sale.utils;
 import com.alibaba.fastjson.JSON;
 
 /**
- * json转化工具包
+ * json转化工具包：使用阿里巴巴的fastJson
  *
  * @author 曾伟
  * @date 2019/11/26 20:03
  */
 public class JsonUtils {
+    /**
+     *对象传成String
+     * @param value
+     * @param <T>
+     * @return
+     */
     public static <T> String beanToString(T value) {
         if (value == null) {
             return null;
@@ -24,6 +30,14 @@ public class JsonUtils {
             return JSON.toJSONString(value);
         }
     }
+
+    /**
+     * String转成bean对象。
+     * @param str
+     * @param clazz
+     * @param <T>
+     * @return
+     */
     public static <T> T stringToBean(String str, Class<T> clazz) {
         if(str == null || str.length() <= 0 || clazz == null) {
             return null;

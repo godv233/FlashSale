@@ -6,7 +6,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * 判断格式正确
+ * 判断格式正确;正则表达式
  *
  * @author 曾伟
  * @date 2019/11/10 14:45

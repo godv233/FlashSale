@@ -7,6 +7,7 @@ import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
 /**
+ * 手机号的验证规则
  * @author 曾伟
  * @date 2019/11/10 16:00
  */
