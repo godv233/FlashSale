@@ -9,6 +9,7 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * redis相关的操作：增删改查
+ *
  * @author 曾伟
  * @date 2019/11/16 10:09
  */
@@ -85,11 +86,12 @@ public class RedisService {
 
     /**
      * 删除
-     * @param verifyCode
+     *
+     * @param prefix
      * @param s
      */
-    public boolean delete(MiaoshaKey verifyCode, String key) {
-        String realKey=verifyCode.getPrefix()+key;
+    public boolean delete(KeyPrefix prefix, String key) {
+        String realKey = prefix.getPrefix() + key;
         Boolean delete = redisTemplate.delete(realKey);
         return delete;
 
@@ -97,11 +99,32 @@ public class RedisService {
 
     /**
      * 加1
-     * @param withExpire
+     *
+     * @param prefix
      * @param key
      */
-    public void incr(AccessKey withExpire, String key) {
-        String realKey=withExpire.getPrefix()+key;
+    public void incr(KeyPrefix prefix, String key) {
+        String realKey = prefix.getPrefix() + key;
         redisTemplate.opsForValue().increment(realKey);
     }
+
+    /**
+     * 限流策略：使用zset
+     * @param prefix
+     * @param key
+     * @param period
+     * @param maxCount
+     * @return
+     */
+    public boolean isAllowed(KeyPrefix prefix,String key,int period,int maxCount) {
+        String realKey=prefix.getPrefix()+key;
+        long now=System.currentTimeMillis();
+        redisTemplate.opsForZSet().add(realKey,now,now);
+        redisTemplate.opsForZSet().removeRangeByScore(realKey,now,now-period*1000);
+        Long count = redisTemplate.opsForZSet().zCard(realKey);
+        redisTemplate.expire(realKey,period+1,TimeUnit.SECONDS);
+        return count<maxCount;
+    }
+
+
 }
